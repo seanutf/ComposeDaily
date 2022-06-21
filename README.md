@@ -33,5 +33,18 @@ fun Text() {}
 对了，对于可组合函数与一般函数不同的是，函数名首字母大写
 
 ## 预览
-也许你早就注意到了在示例代码中除了@Composable， 还有一个@Preview(showBackground = true)
-嗯，考虑到目前还在整个学习过程中非常初级的阶段，关于可组合函数我们就先聊到这里，后面我们依然会再进行分析，下面让我们
+也许你早就注意到了在示例代码中除了@Composable， 还有一个@Preview(showBackground = true),这个注解适用于我们实时预览界面的。被这个注解修饰的函数不能有入参。
+而且这个注解也有很多参数可以设定，让程序真正实现所见即所得。当然这个注解修饰的函数也必须同时被@Composable修饰。
+```kotlin
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    ComposeDailyTheme {
+        Greeting("Android")
+    }
+}
+```
+
+嗯，考虑到目前还在整个学习过程中非常初级的阶段，关于可组合函数我们就先聊到这里，后面我们依然会再进行分析，下面让我们试着修改下这个默认的示例代码，以便直观感受Jetpack Compose
+
+## Text
