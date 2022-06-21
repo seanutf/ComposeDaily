@@ -1,2 +1,2 @@
 # ComposeDaily
-每日Compose学习
+这是我个人的每日业余Compose学习笔记
