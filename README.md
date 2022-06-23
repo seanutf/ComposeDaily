@@ -1,53 +1,38 @@
-# ComposeDaily——002
+# ComposeDaily——003
 
-## 可组合函数
-Jetpack Compose中是不需要XML文件来声明界面元素的，那我们怎么声明界面元素呢，答案就在可组合函数。
-> Jetpack Compose 是围绕可组合函数构建的。这些函数让您可以通过描述应用程序的外观和提供数据依赖项来以编程方式定义应用程序的 UI，而不是专注于 UI 的构建过程（初始化元素、将其附加到父级等）。要创建可组合函数，只需 @Composable在函数名称中添加注释即可。
+## Text
+现在在setContent()方法里和@Preview修饰的DefaultPreview()方法里，只有一个Greeting()方法，这个方法也只调用了Text()方法，
+但就是这个Text()方法，却能为我们呈现文本，就像示例代码中的一样，我们传入一些自定义的字符串给Text()方法中的text参数，
+我们就能在预览界面中看到我们传入的字符串，同时我们可以尝试修改传入的字符串，预览界面同样会很快随着变化。
 
-别忘了上节我们学到的setContent()方法中的入参，就是一个@Composable函数。
+现在让我们换个词汇描述Text(), 不在叫它方法，在Jetpack Compose中，我们叫它组件，或者Widget,如果你熟悉Flutter，这里就和Flutter相像，
+同样地，Text组件中的text参数我们也换成属性这个叫法，之后我们还会学习Jetpack Compose中其他组件与布局。
+
+现在我们点进去Text组件，进入它的源码中，我们会看到它有很多的属性供我们设置：
 ```kotlin
-public fun ComponentActivity.setContent(
-    parent: CompositionContext? = null,
-    content: @Composable () -> Unit
+@Composable
+fun Text(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    style: TextStyle = LocalTextStyle.current
 ) {}
 ```
-理论上你把任何一个函数使用@Composable修饰，都可以传入到setContent()方法中，不过要想正确地显示UI，还是要使用到Jetpack Compose中正确的UI组件，这个我们后面会聊到。
+有文案、字色、字号、字重还可以设置自定义字体等等。这些后续我们会有专门的文字专题来介绍如何自定义文字，
+如果你着急实现你想要的需求可以先自行摸索。
 
-现在让我们回到示例程序中，来观察示例程序中是否都是可组合函数，当然这里代码做了简化：
+在源码中我们还看到，在Text组件中，最终调用了BasicText组件。
+> Compose 提供了基础的 BasicText 和 BasicTextField，它们是用于显示文字以及处理用户输入的主要函数。Compose 还提供了更高级的 Text 和 TextField，它们是遵循 Material Design 准则的可组合项。建议在 Android 平台上使用这些构建块，因为它们的外观和样式非常适合 Android 用户，而且还包括可用以简化用户自定义设置的其他选项，无需编写大量代码。
 
-```kotlin
-@Composable
-fun ComposeDailyTheme() {}
-
-@Composable
-fun Surface() {}
-
-@Composable
-fun Greeting(name: String) {
-}
-
-@Composable
-fun Text() {}
-```
-好了，示例已经很明显了，就不再一一列举了，就像Kotlin 协程中的suspend 函数一样，被可组合函数调用的函数也要使用@Composable修饰，除了SDK 源码甚至连我们自己的Greeting() 方法也是
-对了，对于可组合函数与一般函数不同的是，函数名首字母大写
-
-## 预览
-也许你早就注意到了在示例代码中除了@Composable， 还有一个@Preview(showBackground = true),这个注解适用于我们实时预览界面的。被这个注解修饰的函数不能有入参。
-而且这个注解也有很多参数可以设定，让程序真正实现所见即所得。当然这个注解修饰的函数也必须同时被@Composable修饰。
-```kotlin
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeDailyTheme {
-        Greeting("Android")
-    }
-}
-```
-
-嗯，考虑到目前还在整个学习过程中非常初级的阶段，关于可组合函数我们就先聊到这里，后面我们依然会再进行分析，下面让我们试着修改下这个默认的示例代码，以便直观感受Jetpack Compose
-
-## 准备工作
-为了能够先简单直接入手，我们将会删除一些示例代码，这些代码不代表他们没有用，而是为了能减少对现在学习的干扰。
-并且为了能快速预览我们的改动，我们仅改动@Preview 修饰的方法以及其调用的部分。现在让我们删除ComposeDailyTheme层级以及Surface层级，
-仅仅保留Greeting()方法和它的调用
