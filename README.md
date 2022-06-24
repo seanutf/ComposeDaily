@@ -36,3 +36,15 @@ fun Text(
 在源码中我们还看到，在Text组件中，最终调用了BasicText组件。
 > Compose 提供了基础的 BasicText 和 BasicTextField，它们是用于显示文字以及处理用户输入的主要函数。Compose 还提供了更高级的 Text 和 TextField，它们是遵循 Material Design 准则的可组合项。建议在 Android 平台上使用这些构建块，因为它们的外观和样式非常适合 Android 用户，而且还包括可用以简化用户自定义设置的其他选项，无需编写大量代码。
 
+所以我们也可以使用BasicText组件来代替Text组件来显示文本。
+```kotlin
+@Composable
+fun Greeting(name: String) {
+    //Text(text = "Hello $name!")
+    BasicText(
+        text = "Helo $name!",
+    )
+}
+```
+更多关于文本的内容可参考：
+[Compose 中的文字](https://developer.android.com/jetpack/compose/text?hl=zh-cn)
