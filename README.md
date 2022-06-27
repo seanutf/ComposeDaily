@@ -69,5 +69,30 @@ fun ClickCounter(clicks: Int, onClick: () -> Unit) {
 ![image](https://github.com/seanutf/ComposeDaily/blob/day004/img/iShot_2022-06-25_21.32.25.png)
 
 
-## Jetpack Compose中的include: 状态提升
+##状态提升
 
+回想下以前我们的Android 界面开发，如果有多个Activity，每个Activity中都会有我们自定义的标题栏，返回按钮，标题，以及菜单键，我们是怎么开发的呢？
+是不是按照UI图写一套通用的标题栏XML布局文件，然后在每个Activity的XML布局中include 进去呢？这是一种最直接的方式。能够快速高效地实现界面的复用。
+那在Jetpack Compose中中如何实现呢？
+
+再来看下上面示例代码中的ClickCounter() 方法和Greeting() 方法，虽然这两个方法都调用了Jetpack Compose的原生组件，但是它们自己也在被@Composable所修饰
+所以，在Jetpack Compose看来，它们也是可以被识别的组件，只不过除去原生组件的调用，这两个方法没有任何可以被显示到界面上的内容。
+换句话说就是，你在setContent() 里面写的任何被@Composable修饰的内容都是界面组件(虽然这个意思在前面的小节中有提到)。
+
+如果十分强硬地别扭地进行类比，那么你可以把ClickCounter() 组件和Greeting() 组件类比成一个单独的XML文件，只不过里面只有一个TextView。
+这样，在开发不同页面的相同UI元素时就可以复用相同的组件
+
+理解了这层意思之后，我们再来看下一段代码：
+```kotlin
+@Composable
+fun Test1() {
+    var count by remember { mutableStateOf(0) }
+    Button(onClick = onClick) {
+        Text("I've been clicked $clicks times")
+    }
+}
+```
+你能看出Test()组件和Test1()组件之间的区别吗？没错 Test()组件多了一个ClickCounter组件嵌套，或者说ClickCounter()将数据状态单独提出来放在了Test()组件中
+可这有什么用处吗？Test()组件和Test1()组件的显示效果是一样的呀。
+
+Test()组件和Test1()组件确实显示效果一致，且没有优劣之分。只是会有使用场景的不同。

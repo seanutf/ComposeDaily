@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Test()
+            Test1()
         }
     }
 }
@@ -45,37 +45,19 @@ fun Test() {
     ClickCounter(count) {
         count += 1
     }
+}
 
-    HelloScreen()
+@Composable
+fun Test1() {
+    var count by remember { mutableStateOf(0) }
+    Button(onClick = { count += 1 }) {
+        Text("I've been clicked $count times")
+    }
 }
 
 @Composable
 fun ClickCounter(clicks: Int, onClick: () -> Unit) {
     Button(onClick = onClick) {
         Text("I've been clicked $clicks times")
-    }
-}
-
-
-@Composable
-fun HelloScreen() {
-    var name by rememberSaveable { mutableStateOf("") }
-
-    HelloContent(name = name, onNameChange = { name = it })
-}
-
-@Composable
-fun HelloContent(name: String, onNameChange: (String) -> Unit) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = "Hello, $name",
-            modifier = Modifier.padding(bottom = 8.dp),
-            style = MaterialTheme.typography.h5,
-        )
-        OutlinedTextField(
-            value = name,
-            onValueChange = onNameChange,
-            label = { Text("Name") }
-        )
     }
 }
