@@ -3,12 +3,12 @@ package com.seanutf.android.learn.composedaily
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,17 +19,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Test1()
+            Test()
         }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    //Text(text = "Hello $name!")
-    BasicText(
-        text = "Helo $name!",
-    )
 }
 
 @Preview(showBackground = true)
@@ -40,24 +32,41 @@ fun DefaultPreview() {
 
 @Composable
 fun Test() {
+    //RowMultipleText()
+    //ColumnMultipleText()
+    BoxMultipleText()
+}
 
-    var count by remember { mutableStateOf(0) }
-    ClickCounter(count) {
-        count += 1
+@Composable
+fun ColumnMultipleText() {
+    Column(
+        //垂直方向居中
+        verticalArrangement = Arrangement.Center,
+        //水平方向靠右
+        horizontalAlignment = Alignment.End
+    ){
+        Text("Alfred Sisley")
+        Text("3 minutes ago")
     }
 }
 
 @Composable
-fun Test1() {
-    var count by remember { mutableStateOf(0) }
-    Button(onClick = { count += 1 }) {
-        Text("I've been clicked $count times")
+fun RowMultipleText() {
+    Row(
+        //垂直方向居父布局底部
+        verticalAlignment = Alignment.Bottom,
+        //水平方向靠右
+        horizontalArrangement = Arrangement.End
+    ){
+        Text("Alfred Sisley")
+        Text("3 minutes ago")
     }
 }
 
 @Composable
-fun ClickCounter(clicks: Int, onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text("I've been clicked $clicks times")
+fun BoxMultipleText() {
+    Box {
+        Text("Alfred Sisley")
+        Text("3 minutes ago")
     }
 }
