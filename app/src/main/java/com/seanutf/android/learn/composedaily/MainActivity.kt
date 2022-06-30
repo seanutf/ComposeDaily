@@ -33,13 +33,15 @@ fun DefaultPreview() {
 @Composable
 fun Test() {
     //RowMultipleText()
-    //ColumnMultipleText()
-    BoxMultipleText()
+    ColumnMultipleText()
+    //BoxMultipleText()
 }
 
 @Composable
 fun ColumnMultipleText() {
     Column(
+        modifier = Modifier.padding(24.dp)
+            .fillMaxWidth(),
         //垂直方向居中
         verticalArrangement = Arrangement.Center,
         //水平方向靠右

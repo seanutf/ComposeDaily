@@ -1,61 +1,51 @@
-# ComposeDaily——006
+# ComposeDaily——007
 
-## 布局
-在View系统中，我们创建一个XML布局文件时，Android Studio会默认帮我们添加上顶层父布局。
-而在Jetpack Compose中，默认是没有添加父布局层级的，并且相比于View系统中，不同层级、不同实现的ViewGroup
-Jetpack Compose中布局种类很少：
+## 修饰符
+借助修饰符，您可以修饰或扩充可组合项。您可以使用修饰符来执行以下操作：
 
-## Column
-就如同Column这个单词的翻译一样，在Column中就是表示子组件是纵向竖直排列：
+* 更改可组合项的大小、布局、行为和外观
+* 添加信息，如无障碍标签
+* 处理用户输入
+* 添加高级互动，如使元素可点击、可滚动、可拖动或可缩放
 
 ```kotlin
 @Composable
 fun ColumnMultipleText() {
-    Column {
+    Column(
+        modifier = Modifier.padding(24.dp),
+        //垂直方向居中
+        verticalArrangement = Arrangement.Center,
+        //水平方向靠右
+        horizontalAlignment = Alignment.End
+    ){
         Text("Alfred Sisley")
         Text("3 minutes ago")
     }
 }
 ```
-
-## Row
-Row则表示子组件是横向水平排列：
+同时也可以将多个修饰符函数链式调用：
 
 ```kotlin
 @Composable
-fun RowMultipleText() {
-    Row{
+fun ColumnMultipleText() {
+    Column(
+        modifier = Modifier.padding(24.dp)
+            .fillMaxWidth(),
+        //垂直方向居中
+        verticalArrangement = Arrangement.Center,
+        //水平方向靠右
+        horizontalAlignment = Alignment.End
+    ){
         Text("Alfred Sisley")
         Text("3 minutes ago")
     }
 }
 ```
+请注意，在上面的代码中，结合使用了不同的修饰符函数。
 
-Column和Row都支持设置子组件在排列时的对齐方式：
-```kotlin
-@Composable
-fun RowMultipleText(artist: Artist) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("Alfred Sisley")
-        Text("3 minutes ago")
-    }
-}
-```
+* padding 在元素周围留出空间。
+* fillMaxWidth 使可组合项填充其父项为它提供的最大宽度。
 
-## Box 
-使用Box可将元素放在其他元素上：
+最佳做法是让所有可组合项接受 modifier 参数，并将该修饰符传递给其发出界面元素的第一个子项。这样做可以提高代码的可重用性，使其行为更可预测且更直观。
 
-```kotlin
-@Composable
-fun BoxMultipleText(artist: Artist) {
-    Box(verticalAlignment = Alignment.CenterVertically) {
-        Text("Alfred Sisley")
-        Text("3 minutes ago")
-    }
-}
-```
-
-## 布局模型
-
-[官方文档](https://developer.android.com/jetpack/compose/layouts/basics#model)
-
+[官方文档](https://developer.android.com/jetpack/compose/modifiers)
