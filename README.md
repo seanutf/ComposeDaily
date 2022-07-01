@@ -1,51 +1,109 @@
-# ComposeDaily——007
+# ComposeDaily——008
 
-## 修饰符
-借助修饰符，您可以修饰或扩充可组合项。您可以使用修饰符来执行以下操作：
+## 图片：Image(1)
 
-* 更改可组合项的大小、布局、行为和外观
-* 添加信息，如无障碍标签
-* 处理用户输入
-* 添加高级互动，如使元素可点击、可滚动、可拖动或可缩放
+之前的示例代码中尽量避免使用图片相关的，一个是作为基础元素组件，以Text为例就可以，二来也是想专门的讲下图片
 
+在Jetpack Compose中展示图片使用Image组件。而Image组件对应的有三个实现方式：
 ```kotlin
 @Composable
-fun ColumnMultipleText() {
-    Column(
-        modifier = Modifier.padding(24.dp),
-        //垂直方向居中
-        verticalArrangement = Arrangement.Center,
-        //水平方向靠右
-        horizontalAlignment = Alignment.End
-    ){
-        Text("Alfred Sisley")
-        Text("3 minutes ago")
+fun Image(
+    painter: Painter,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null
+) {
+    val semantics = if (contentDescription != null) {
+        Modifier.semantics {
+            this.contentDescription = contentDescription
+            this.role = Role.Image
+        }
+    } else {
+        Modifier
+    }
+
+    // Explicitly use a simple Layout implementation here as Spacer squashes any non fixed
+    // constraint with zero
+    Layout(
+        {},
+        modifier.then(semantics).clipToBounds().paint(
+            painter,
+            alignment = alignment,
+            contentScale = contentScale,
+            alpha = alpha,
+            colorFilter = colorFilter
+        )
+    ) { _, constraints ->
+        layout(constraints.minWidth, constraints.minHeight) {}
     }
 }
 ```
-同时也可以将多个修饰符函数链式调用：
+指定一个自定义的画笔进行绘制的图片
 
 ```kotlin
 @Composable
-fun ColumnMultipleText() {
-    Column(
-        modifier = Modifier.padding(24.dp)
-            .fillMaxWidth(),
-        //垂直方向居中
-        verticalArrangement = Arrangement.Center,
-        //水平方向靠右
-        horizontalAlignment = Alignment.End
-    ){
-        Text("Alfred Sisley")
-        Text("3 minutes ago")
-    }
+fun Image(
+    imageVector: ImageVector,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null
+) = Image(
+    painter = rememberVectorPainter(imageVector),
+    contentDescription = contentDescription,
+    modifier = modifier,
+    alignment = alignment,
+    contentScale = contentScale,
+    alpha = alpha,
+    colorFilter = colorFilter
+)
+```
+
+传入一个自定义的矢量图进行绘制的图片，内部调用的还是自定义画笔实现
+
+```kotlin
+@Composable
+fun Image(
+    bitmap: ImageBitmap,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DefaultFilterQuality
+) {
+    val bitmapPainter = remember(bitmap) { BitmapPainter(bitmap, filterQuality = filterQuality) }
+    Image(
+        painter = bitmapPainter,
+        contentDescription = contentDescription,
+        modifier = modifier,
+        alignment = alignment,
+        contentScale = contentScale,
+        alpha = alpha,
+        colorFilter = colorFilter
+    )
 }
 ```
-请注意，在上面的代码中，结合使用了不同的修饰符函数。
 
-* padding 在元素周围留出空间。
-* fillMaxWidth 使可组合项填充其父项为它提供的最大宽度。
+传入一个自定义的ImageBitmap进行绘制的图片，内部调用的也是自定义画笔实现
 
-最佳做法是让所有可组合项接受 modifier 参数，并将该修饰符传递给其发出界面元素的第一个子项。这样做可以提高代码的可重用性，使其行为更可预测且更直观。
+这个ImageBitmap就是Compose中的Bitmap，Compose中提供了两者互转的方法：
 
-[官方文档](https://developer.android.com/jetpack/compose/modifiers)
+```kotlin
+fun ImageBitmap.asAndroidBitmap(): Bitmap =
+    when (this) {
+        is AndroidImageBitmap -> bitmap
+        else -> throw UnsupportedOperationException("Unable to obtain android.graphics.Bitmap")
+    }
+
+
+fun Bitmap.asImageBitmap(): ImageBitmap = AndroidImageBitmap(this)
+```
+
+在这一小节的示例代码中我们展示了ImageVector如何使用的。
